@@ -19,25 +19,28 @@ function queryResolve( request ){
     return url.parse(request.url, true).query;
 }
 
+function getBody(request){
+    return new Promise((resolve, reject)=>{
+        var body = '';
+
+        request.on('data', (data)=>{
+            body+=data;
+
+            if(body.length > 1e6)
+                return reject("Erro: muitos dados na requisição!");
+            return resolve(JSON.parse(body));
+        })
+    })
+}
+
 /**
  * Retorna os parâmtros recebidos através do corpo
  * da requisição
  */
-function bodyResolve( request ){
-    if (request.method == 'POST') {
-        var body = '';
-
-        request.on('data', function (data) {
-            body += data;
-
-            // Too much POST data, kill the connection!
-            // 1e6 === 1 * Math.pow(10, 6) === 1 * 1000000 ~~~ 1MB
-            if (body.length > 1e6)
-                request.connection.destroy();
-        });
-
-        return JSON.parse(body);
-    }
+async function bodyResolve( request, response ){
+    if(request.method == 'POST') 
+        return await getBody(request);
+    responseError("notPost", response);
 }
 
 /**
@@ -71,9 +74,9 @@ function responseError( err, response ){
  * @param paramResolve função que trata os parâmetros de acordo com o método HTTP
  * @param func função da rota em execução
  */
-function routeExec(request, response, paramResolve, func){
+async function routeExec(request, response, paramResolve, func){
     try{
-        func(paramResolve(request), request.method);
+        func(await paramResolve(request), request.method);
     }catch(err){
         responseError(err, response);
     }
@@ -85,7 +88,7 @@ function routeExec(request, response, paramResolve, func){
  * @param request dados da requisição
  * @param response resposta para o cliente HTTP
  */
-module.exports = function routes( request, response ){
+module.exports = async function routes( request, response ){
     let path = urlResolse(request);
     switch(path){
         case "/create": 
