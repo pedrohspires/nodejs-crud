@@ -1,0 +1,6 @@
+{
+    "USER": "DB_USER",
+    "PASSWORD": "DB_PASSWORD",
+    "SCHEMA": "DB_SCHEMA",
+    "HOST": "DB_HOST"
+}
