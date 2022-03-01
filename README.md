@@ -30,3 +30,10 @@ The CRUD stores users with:
 * Cathegory
 * Price
 * Stock
+
+## How to use?
+* Clone this project and extract data.
+* Rename the "config.json.example" file to "config.json".
+* Complete the "config.json" with your database configuration.
+* Enter in main folder and use "npm run serve" to execute server. Or
+* Enter the src/ folder and use "node app.json" to execute server.
