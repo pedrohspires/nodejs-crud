@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/pedrohspires/NodeJsCRUD/issues"
   },
-  "homepage": "https://github.com/pedrohspires/NodeJsCRUD#readme"
+  "homepage": "https://github.com/pedrohspires/NodeJsCRUD#readme",
+  "dependencies": {
+    "mysql": "^2.18.1"
+  }
 }
