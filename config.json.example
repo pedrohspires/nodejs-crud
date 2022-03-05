@@ -1,6 +1,6 @@
 {
     "USER": "DB_USER",
     "PASSWORD": "DB_PASSWORD",
-    "SCHEMA": "DB_SCHEMA",
+    "DATABASE": "DB_NAME",
     "HOST": "DB_HOST"
 }
