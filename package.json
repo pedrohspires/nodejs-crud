@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/pedrohspires/NodeJsCRUD#readme",
   "dependencies": {
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "mysql2": "^2.3.3"
   }
 }
