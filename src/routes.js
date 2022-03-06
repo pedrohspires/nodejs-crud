@@ -20,7 +20,7 @@ module.exports = async (req, res) => {
         // methods create errors if necessary to handle in catch
         switch (url) {
             case "/api/create": await createData(req); break;
-            case "/api/read": await readData(req); break;
+            case "/api/read": await readData(req, res); break;
             case "/api/update": await updateData(req); break;
             case "/api/delete": await deleteData(req); break;
             default: throw new Error("Unknown path");
