@@ -1,5 +1,4 @@
 const { createData, readData, updateData, deleteData } = require('./CRUD/crud'); // CRUD unstructured functions
-const database = require('./database');
 const requestResolve = require('./requestResolve');
 
 function apiPathValidator(url){
@@ -20,10 +19,10 @@ module.exports = async (req, res) => {
 
         // methods create errors if necessary to handle in catch
         switch (url) {
-            case "/api/create": createData(req, database); break;
-            case "/api/read": readData(req, database); break;
-            case "/api/update": updateData(req, database); break;
-            case "/api/delete": deleteData(req, database); break;
+            case "/api/create": await createData(req); break;
+            case "/api/read": await readData(req); break;
+            case "/api/update": await updateData(req); break;
+            case "/api/delete": await deleteData(req); break;
             default: throw new Error("Unknown path");
         }
     }catch(err){
