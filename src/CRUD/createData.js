@@ -1,68 +1,49 @@
 const requestResolve = require('../requestResolve');
+const database = require('../database');
 
-/**
- * Check if a product already exists
- * 
- * @param {string} name - name of the product
- * @param {object} database - a configured database
- * @return {boolean} - true if product already exists or false if not
- */
-async function productExists(name, database) {
+async function itemExists(name) {
     const connection = await database.connect();
-    const [rows] = await connection.query('select * from product where name=?', name);
-    if(rows.length > 0) return true;
-    return false;
+    const [rows] = await connection.query("SELECT * FROM product WHERE name=?;", name);
+    return rows.length > 0 ? true : false;
 }
 
 /**
- * Check if a data to insert into database is valid for the insertiion
+ * Verifi if the body is valid
  * 
- * @param {object} body - http body request object to insert into database
- * @param {object} database - a configured database
- * @return {boolean} - true if data is valid or false if not
+ * @param {object} body - the body of the request
+ * @returns {boolean} true if body is valid
  */
-function dataIsValid(body, database) {
+async function bodyIsValid(body) {
     if(!body.name || !body.cathegory || !body.price || !body.stock)
         return false;
-    if(productExists(body.name, database))
+
+    if(await itemExists(body.name))
         return false;
+
     return true;
 }
 
-/**
- * Create the connection to the database and run the query in the database
- * 
- * @param {object} body - http body request object to insert into database
- * @param {object} database - a configured database
- */
-async function queryExec(body, database){
+async function queryExec(body){
+    if(!body.description)
+        body.description = '';
     const connection = await database.connect();
-    const result = await connection.query(
-        'insert into product (name, description, cathegory, price, stock) values (?,?,?,?,?);',
-        [body.name, body.description, body.cathegory, body.price, body.stock]
-    );
-    console.log(result);
+    let query = "insert into product (name, description, cathegory, price, stock) values (?,?,?,?,?);";
+    let values = [body.name, body.description, body.cathegory, body.price, body.stock];
+    connection.query(query, values);
 }
 
-
 /**
- * Function to create a new data in the database
+ * Function used to insert a new item into the database
  * 
- * @param {Object} req - the request object
- * @param {Object} database - the database configured
+ * @param {object} req - http request object
  */
-module.exports = async (req, database) => {
+module.exports = async (req) => {
     if(req.method !== 'POST')
-        throw new Error("Method not supported"); // the required method is POST to create a new data in the database
+        throw new Error('Invalid method: ' + req.method);
 
-    // The path "/api/create" is verified before calling this function
     const body = await requestResolve.body(req);
-    if(!dataIsValid(body, database))
-        throw new Error("Invalid data");
-
-    try{
-        queryExec(body, database);
-    }catch(err){
-        console.log('Unknow error: ' + err.message);
-    }
+    if(!(await bodyIsValid(body)))
+        throw new Error('Incomplete body or already existing item');
+    
+    queryExec(body);
 }
