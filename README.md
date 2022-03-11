@@ -35,5 +35,30 @@ The CRUD stores users with:
 * Clone this project and extract data.
 * Rename the "config.json.example" file to "config.json".
 * Complete the "config.json" with your database configuration.
+* Run databaseModelWorkbench in the Workbench or create a new database with:
+    * name - for the product name
+    * description - for the product description
+    * cathegory - for the product cathegory
+    * price - for the product price
+    * stock - for the product stock
 * Enter in main folder and use "npm run serve" to execute server. Or
 * Enter the src/ folder and use "node app.json" to execute server.
+
+## Errors that the api generates
+* If the /api/ not exists in the url
+* If the /api/"crud route" is different of the CRUD routes (create, read, update, delete)
+* If:
+    * /create do not POST method
+    * /read do not GET method
+    * /update do not PUT method
+    * /delete do not DELETE method
+* If in the /create
+    * Some mandatory field is not defined
+    * Item already exists
+* If in the /update
+    * Name field is not defined
+    * Item not exists in the database
+* If in the /delete
+    * Name field is not defined
+<br>
+All errors return JSON to client api with statuscode 400 - Bad request
