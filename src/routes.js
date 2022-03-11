@@ -27,7 +27,7 @@ module.exports = async (req, res) => {
         }
     }catch(err){
         // handles errors created in route methods
-        res.writeHead(404);
+        res.writeHead(400);
         res.write(JSON.stringify({Error: err.message}));
     }
     res.end();
