@@ -19,7 +19,7 @@ async function queryExec(){
  */
 module.exports = async (req, res) => {
     if(req.method !== 'GET')
-        throw "Method not supported";
+        throw new Error('Method not supported');
     
     res.write(JSON.stringify(await queryExec()));
 }
