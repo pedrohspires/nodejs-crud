@@ -26,8 +26,9 @@ module.exports = async (req, res) => {
             default: throw new Error("Unknown path");
         }
     }catch(err){
-        console.log(err);
         // handles errors created in route methods
+        res.writeHead(404);
+        res.write(JSON.stringify({Error: err.message}));
     }
     res.end();
 }
